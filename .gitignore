@@ -1,6 +1,5 @@
 rawdata
 procdata
-metadata/*
 results
 .snakemake/
 logs/
