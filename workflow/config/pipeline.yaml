@@ -1,7 +1,35 @@
-
+# Configure relative paths for script execution
+rawdataDir: rawdata
+procdataDir: procdata
+metadataDir: metadata
+resultsDir: results
+scriptsDir: scripts
+logsDir: logs
 
 KALLISTO_version: "0.46.1"
 
 GENCODE_GENOME:
   REF_BUILD: "GRCh38"
   REF_VERSION: "45"
+
+
+# Configure Data URLs
+metadata:
+  sampleAnnotation: "https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJNA297219&o=acc_s%3Aa"
+  treatmentAnnotation: ""
+
+treatmentResponse:
+  doseResponse:
+    description: "Dose response data"
+    url: ""
+
+
+# Configure Gencode genome parameters
+uhn_breast_gencode_ver: 45
+gencode_reference: GRCh38
+
+molecularProfiles:
+  rnaseq:
+    description: "RNA-Seq"
+    url: "https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJNA297219&o=acc_s%3Aa"
+

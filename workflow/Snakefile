@@ -13,12 +13,42 @@ include: "rules/rnaseq.smk"
 
 rule all:
     input:
+        expand("procdata/rnaseq/{tool}_v{tool_version}_{ref_build}.{ref_version}/mae.RDS",
+            tool = "kallisto",
+            tool_version = KALLISTO_version,
+            ref_build = REF_BUILD,
+            ref_version = REF_VERSION
+        )
+
+
+
+rule build_treatmentResponseExperiment:
+    input:
+        treatmentResponse = "rawdata/doseResponseCurves_TFRI_TNBC_UHN.RData"
+    output:
+        tre = "procdata/treatmentResponse/tre.RDS"
+    log:
+        'logs/treatmentResponse/build_treatmentResponseExperiment.log',
+    script:
+        "scripts/build_treatmentResponseExperiment.R"
+
+
+
+rule build_MultiAssayExperiment:
+    input:
         rse_list = expand("procdata/rnaseq/{tool}_v{tool_version}_{ref_build}.{ref_version}/rse_list.RData",
             tool = "kallisto",
             tool_version =KALLISTO_version,
             ref_build = REF_BUILD,
             ref_version = REF_VERSION
-        )
+        ),
+        sampleMetadata = "metadata/sampleMetadata.txt"
+    output:
+        mae = "procdata/rnaseq/{tool}_v{tool_version}_{ref_build}.{ref_version}/mae.RDS"
+    log:
+        'logs/rnaseq/{tool}_v{tool_version}_{ref_build}.{ref_version}/build_MultiAssayExperiment.log',
+    script:
+        "scripts/build_MultiAssayExperiment.R"
 
 rule create_rse_list:
     input:
