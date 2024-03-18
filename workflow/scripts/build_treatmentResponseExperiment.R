@@ -27,7 +27,8 @@ treatmentNames <- names(treatmentResponse)
 raw <- lapply(treatmentNames, function(treatment){
     # message(paste("Processing: ", treatment, sep = "\n\t"))
     samples <- names(treatmentResponse[[treatment]])
-
+    samples <- gsub("(-| |PT)", "", toupper(samples))
+    names(treatmentResponse[[treatment]]) <- samples
     dt <- lapply(samples, function(sample){
         # message(paste("Processing: ", sample, sep = "\n\t"))
         Doses <- unlist(treatmentResponse[[treatment]][[sample]][[1]])
@@ -47,7 +48,8 @@ raw <- lapply(treatmentNames, function(treatment){
 extrapolated <- lapply(treatmentNames, function(treatment){
     # message(paste("Processing: ", treatment, sep = "\n\t"))
     samples <- names(treatmentResponse[[treatment]])
-
+    samples <- gsub("(-| |PT)", "", toupper(samples))
+    names(treatmentResponse[[treatment]]) <- samples
     dt <- lapply(samples, function(sample){
         # message(paste("Processing: ", sample, sep = "\n\t"))
         Doses <- unlist(treatmentResponse[[treatment]][[sample]][[1]])
@@ -88,6 +90,8 @@ CoreGx::assayMap(tdm) <- list(
         mapped_columns = c("viability")
     )
 )
+
+message("Constructing the treatment response experiment object")
 (uhn_tre <- CoreGx::metaConstruct(tdm))
 uhn_tre$sensitivity
 

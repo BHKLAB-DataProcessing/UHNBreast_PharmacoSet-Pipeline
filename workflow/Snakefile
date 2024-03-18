@@ -11,14 +11,23 @@ REF_VERSION = config["GENCODE_GENOME"]["REF_VERSION"]
 
 include: "rules/rnaseq.smk"
 
-rule all:
+rule buildPharmacoSet:
     input:
-        expand("procdata/rnaseq/{tool}_v{tool_version}_{ref_build}.{ref_version}/mae.RDS",
+        mae = expand("procdata/rnaseq/{tool}_v{tool_version}_{ref_build}.{ref_version}/mae.RDS",
             tool = "kallisto",
             tool_version = KALLISTO_version,
             ref_build = REF_BUILD,
             ref_version = REF_VERSION
-        )
+        ),
+        tre = "procdata/treatmentResponse/tre.RDS",
+        sampleMetadata = "metadata/sampleMetadata.txt"
+    output:
+        "results/data/PharmacoSet.RDS"
+    log:
+        'logs/buildPharmacoSet.log'
+    script:
+        "scripts/buildPharmacoSet.R"
+
 
 
 
@@ -29,6 +38,8 @@ rule build_treatmentResponseExperiment:
         tre = "procdata/treatmentResponse/tre.RDS"
     log:
         'logs/treatmentResponse/build_treatmentResponseExperiment.log',
+    threads: 
+        30
     script:
         "scripts/build_treatmentResponseExperiment.R"
 
