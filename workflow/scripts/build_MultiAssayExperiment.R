@@ -63,8 +63,11 @@ summarizedExperimentLists <- sapply(rse_list, function(x){
         batchid = rep(NA, ncol(x)),
         row.names = colnames(x)
     )
+    x@metadata <- c(list(annotation = "rnaseq"), WILDCARDS[names(WILDCARDS)[names(WILDCARDS) != ""]])
+
     x
 })
+names(summarizedExperimentLists) <- paste0("rnaseq.", names(rse_list))
 ExpList <- MultiAssayExperiment::ExperimentList(summarizedExperimentLists)
 message("ExperimentList:", paste(capture.output(show(ExpList)), collapse = "\n\t"))
 

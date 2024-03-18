@@ -23,11 +23,6 @@ treatmentResponse:
     description: "Dose response data"
     url: ""
 
-
-# Configure Gencode genome parameters
-uhn_breast_gencode_ver: 45
-gencode_reference: GRCh38
-
 molecularProfiles:
   rnaseq:
     description: "RNA-Seq"
