@@ -1,0 +1,42 @@
+import pandas as pd
+
+
+configfile: "workflow/config/pipeline.yaml"
+
+sra_files, sra = glob_wildcards('rawdata/rnaseq/{sra_accession}/{sra_accession_}.sra')
+
+KALLISTO_version = config["KALLISTO_version"] 
+REF_BUILD = config["GENCODE_GENOME"]["REF_BUILD"]
+REF_VERSION = config["GENCODE_GENOME"]["REF_VERSION"]
+
+include: "rules/rnaseq.smk"
+
+rule all:
+    input:
+        rse_list = expand("procdata/rnaseq/{tool}_v{tool_version}_{ref_build}.{ref_version}/rse_list.RData",
+            tool = "kallisto",
+            tool_version =KALLISTO_version,
+            ref_build = REF_BUILD,
+            ref_version = REF_VERSION
+        )
+
+rule create_rse_list:
+    input:
+        quant_files = lambda wc:
+            expand("procdata/rnaseq/{tool}_v{tool_version}_{ref_build}.{ref_version}/{sample}/abundance.h5",
+                tool=wc.tool,
+                tool_version=wc.tool_version,
+                ref_build=wc.ref_build,
+                ref_version=wc.ref_version,
+                sample = sra_files
+        ),
+        annotation_file = "references/{ref_build}_v{ref_version}/annotation.gtf",
+    output:
+        rse_list = "procdata/rnaseq/{tool}_v{tool_version}_{ref_build}.{ref_version}/rse_list.RData",
+    log:
+        'logs/rnaseq/{tool}_v{tool_version}_{ref_build}.{ref_version}/create_rse_list.log',
+    envmodules:
+        'R/4.2.1',
+    threads: 2,
+    script:
+        "scripts/rnaseq/create_rse_list.R"

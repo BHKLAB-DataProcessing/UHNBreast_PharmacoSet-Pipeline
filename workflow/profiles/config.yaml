@@ -1,0 +1,23 @@
+
+jobs: 120
+cores: 320
+slurm: True
+keep-going: True
+rerun-incomplete: True
+printshellcmds: True
+
+use-envmodules: True
+show-failed-logs: True
+
+default-resources:
+    slurm_account: "bhklab"
+    slurm_partition: "himem"
+
+set-resources:
+    - sra_to_fastq:slurm_partition="himem"
+    - sra_to_fastq:mem_mb=30000
+    - sra_to_fastq:runtime=29
+
+    - kallisto_quant:slurm_partition="himem"
+    - kallisto_quant:mem_mb=30000
+    - kallisto_quant:runtime=29

@@ -1,0 +1,7 @@
+
+
+KALLISTO_version: "0.46.1"
+
+GENCODE_GENOME:
+  REF_BUILD: "GRCh38"
+  REF_VERSION: "45"
